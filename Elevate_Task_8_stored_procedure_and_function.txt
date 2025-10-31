@@ -1,0 +1,113 @@
+
+
+---stored Procedure-----
+create or replace procedure pr1(n1 number)
+is 
+v1 varchar2(30);
+v2 number(20);
+v3 date;
+begin
+select first_name||last_name,salary,hire_date
+into v1 ,v2,v3 from employees
+where employee_id=n1;
+dbms_output.put_line(v1||v2||v3);
+end;
+
+set serveroutput on
+execute pr1(107);
+
+set serveroutput on
+execute pr1(101);
+
+-----------------
+-----------------
+select*from p1;
+create or replace procedure p45(n1 number,n2 varchar2)
+is 
+begin
+update p1
+set tname=n2
+where tno=n1;
+dbms_output.put_line('data updated');
+end;
+
+set serveroutput on
+execute p45(12,'Parag');
+
+select*from p1;
+
+
+-----------------------------------
+---------Procedure with cursor----
+CREATE OR REPLACE PROCEDURE PR5(n1 NUMBER)
+IS
+    CURSOR c1 IS
+        SELECT e.employee_id, e.first_name || ' ' || e.last_name AS full_name,
+               d.department_name, d.department_id
+        FROM employees e JOIN departments d 
+        ON e.department_id = d.department_id
+        WHERE d.department_id = n1;
+
+    v1 NUMBER(10);
+    v2 VARCHAR2(30);
+    v3 VARCHAR2(30);
+    v4 NUMBER(10);
+BEGIN
+    FOR i IN c1 LOOP
+        v1 := i.employee_id;
+        v2 := i.full_name;
+        v3 := i.department_name;
+        v4 := i.department_id;
+
+        DBMS_OUTPUT.PUT_LINE('EmpID: ' || v1 || ' | Name: ' || v2 || ' | Dept: ' || v3 || ' (' || v4 || ')');
+    END LOOP;
+END;
+
+set serveroutput on
+execute pr5(90);
+
+----IN out PROCEDURE-----------------
+
+create or replace procedure pr4(n1 IN number,n2 out number)
+is
+begin
+n2:=n1*0.20;
+end;
+variable v3 number;
+
+set serveroutput on
+execute pr4(1000,:v3);
+print v3;
+
+
+
+
+
+----function-----
+---? What is a Function in PL/SQL?
+--A function in PL/SQL is a named block that Performs a specific task, and
+--Returns exactly one value using the RETURN keyword.
+---You can call a function inside SQL queries, PL/SQL blocks, or 
+--even other functions/procedures.
+
+-----------------
+
+
+create or replace function f1(n1 number)
+Return number
+is
+begin
+return n1*0.18;
+end;
+
+---------------
+
+create or replace function f3(n1 number)
+return varchar2
+is
+v1 varchar2(50);
+begin
+select first_name||'  '||last_name into v1
+from employees where employee_id=n1;
+return v1;
+end;
